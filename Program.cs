@@ -3,6 +3,7 @@ using CalculatorLibrary;
 
 namespace CalculatorProgram
 {
+
     class Program
     {
         static void Main(string[] args)
@@ -12,6 +13,7 @@ namespace CalculatorProgram
             Console.WriteLine("Console Calculator in C#\r");
             Console.WriteLine("------------------------\n");
 
+            Calculator calculator = new Calculator();
             while (!endApp)
             {
                 // Declare variables and set to empty.
@@ -27,7 +29,7 @@ namespace CalculatorProgram
                 double cleanNum1 = 0;
                 while (!double.TryParse(numInput1, out cleanNum1))
                 {
-                    Console.Write("This is not valid input. Please enter a numeric value: ");
+                    Console.Write("This is not valid input. Please enter an integer value: ");
                     numInput1 = Console.ReadLine();
                 }
 
@@ -38,7 +40,7 @@ namespace CalculatorProgram
                 double cleanNum2 = 0;
                 while (!double.TryParse(numInput2, out cleanNum2))
                 {
-                    Console.Write("This is not valid input. Please enter a numeric value: ");
+                    Console.Write("This is not valid input. Please enter an integer value: ");
                     numInput2 = Console.ReadLine();
                 }
 
@@ -61,8 +63,6 @@ namespace CalculatorProgram
                 {
                     try
                     {
-                        // Program.cs
-                        Calculator calculator = new Calculator();
                         result = calculator.DoOperation(cleanNum1, cleanNum2, op);
                         if (double.IsNaN(result))
                         {
@@ -83,6 +83,7 @@ namespace CalculatorProgram
 
                 Console.WriteLine("\n"); // Friendly linespacing.
             }
+            calculator.Finish();
             return;
         }
     }
