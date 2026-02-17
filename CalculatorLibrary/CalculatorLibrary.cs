@@ -6,8 +6,15 @@ namespace CalculatorLibrary;
 class Calculator
 {
     JsonWriter writer;
+    public int UsageCount { get; set; }
+    public List<double> ResultHistory { get; set; }
+    public Boolean ShouldStoreResults { get; set; }
     public Calculator()
     {
+        UsageCount = 0;
+        ResultHistory = [];
+        ShouldStoreResults = false;
+
         StreamWriter logFile = File.CreateText("calculatorlog.json");
         logFile.AutoFlush = true;
         writer = new JsonTextWriter(logFile);
@@ -16,6 +23,11 @@ class Calculator
         writer.WritePropertyName("Operations");
         writer.WriteStartArray();
     }
+
+    // TODO: Create a functionality that will count the amount of times the calculator was used.
+    // TODO: Store a list with the latest calculations. And give the users the ability to delete that list.
+    // TODO: Allow the users to use the results in the list above to perform new calculations.
+    // TODO: Add extra calculations: Square Root, Taking the Power, 10x, Trigonometry functions.
 
     // CalculatorLibrary.cs
     public double DoOperation(double num1, double num2, string op)
@@ -58,6 +70,7 @@ class Calculator
         writer.WriteValue(result);
         writer.WriteEndObject();
 
+        UsageCount += 1;
         return result;
     }
 
