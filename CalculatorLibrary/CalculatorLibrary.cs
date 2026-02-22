@@ -62,6 +62,54 @@ class Calculator
                 }
                 writer.WriteValue("Divide");
                 break;
+            case "r":
+                // Square root of num1
+                if (num1 >= 0)
+                {
+                    result = Math.Sqrt(num1);
+                }
+                writer.WriteValue("SquareRoot");
+                break;
+            case "p":
+                // Power: num1 ^ num2
+                result = Math.Pow(num1, num2);
+                writer.WriteValue("Power");
+                break;
+            case "x":
+                // 10^num1
+                result = Math.Pow(10, num1);
+                writer.WriteValue("TenPowerX");
+                break;
+            case "sin":
+                result = Math.Sin(num1);
+                writer.WriteValue("Sine");
+                break;
+            case "cos":
+                result = Math.Cos(num1);
+                writer.WriteValue("Cosine");
+                break;
+            case "tan":
+                result = Math.Tan(num1);
+                writer.WriteValue("Tangent");
+                break;
+            case "sec":
+                // sec(x) = 1/cos(x)
+                if (Math.Cos(num1) != 0)
+                    result = 1 / Math.Cos(num1);
+                writer.WriteValue("Secant");
+                break;
+            case "cosec":
+                // cosec(x) = 1/sin(x)
+                if (Math.Sin(num1) != 0)
+                    result = 1 / Math.Sin(num1);
+                writer.WriteValue("Cosecant");
+                break;
+            case "cot":
+                // cot(x) = 1/tan(x)
+                if (Math.Tan(num1) != 0)
+                    result = 1 / Math.Tan(num1);
+                writer.WriteValue("Cotangent");
+                break;
             // Return text for an incorrect option entry.
             default:
                 break;

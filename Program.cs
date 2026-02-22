@@ -22,61 +22,30 @@ namespace CalculatorProgram
                 string? numInput2 = "";
                 double result = 0;
 
+                double cleanNum1 = 0;
+                double cleanNum2 = 0;
+                bool usePreviousResult = false;
                 if (calculator.ResultHistory.Count > 0)
                 {
-                    // Console.Write("Would you like to use a previously stored result? \n");
-                    // Console.WriteLine("\ty - Yes");
-                    // Console.WriteLine("\tn - No");
-                    // string? decision = Console.ReadLine();
-                    // Console.WriteLine();
-
                     Console.Write("Press 'p' to use a previously stored result, or press any other key and Enter to continue: ");
                     if (Console.ReadLine() == "p")
                     {
                         Console.WriteLine("Select which results you would like to use: \n");
-
                         for (int i = 0; i < calculator.ResultHistory.Count; i++)
                         {
                             Console.WriteLine($"\t{i + 1} - {calculator.ResultHistory[i]}");
                         }
-
                         Console.WriteLine();
                         Console.Write("Your option? ");
                         string? selectedResult = Console.ReadLine();
-                        while (selectedResult == null && int.Parse(selectedResult) > 0 &&
-                        int.Parse(selectedResult) <= calculator.ResultHistory.Count)
+                        while (selectedResult == null || !int.TryParse(selectedResult, out int idx) || idx < 1 || idx > calculator.ResultHistory.Count)
                         {
-                            Console.Write("This is not valid input. Please select an appropriate option.");
+                            Console.Write("This is not valid input. Please select an appropriate option: ");
                             selectedResult = Console.ReadLine();
-                            // Console.WriteLine();
                         }
-
-                        result = calculator.ResultHistory[int.Parse(selectedResult) - 1];
+                        cleanNum1 = calculator.ResultHistory[int.Parse(selectedResult) - 1];
+                        usePreviousResult = true;
                     }
-                }
-
-                // Ask the user to type the first number.
-                Console.WriteLine();
-                Console.Write("Type a number, and then press Enter: ");
-                numInput1 = Console.ReadLine();
-                Console.WriteLine();
-
-                double cleanNum1 = 0;
-                while (!double.TryParse(numInput1, out cleanNum1))
-                {
-                    Console.Write("This is not valid input. Please enter an integer value: ");
-                    numInput1 = Console.ReadLine();
-                }
-
-                // Ask the user to type the second number.
-                Console.Write("Type another number, and then press Enter: ");
-                numInput2 = Console.ReadLine();
-
-                double cleanNum2 = 0;
-                while (!double.TryParse(numInput2, out cleanNum2))
-                {
-                    Console.Write("This is not valid input. Please enter an integer value: ");
-                    numInput2 = Console.ReadLine();
                 }
 
                 // Ask the user to choose an operator.
@@ -84,21 +53,112 @@ namespace CalculatorProgram
                 Console.WriteLine("\ta - Add");
                 Console.WriteLine("\ts - Subtract");
                 Console.WriteLine("\tm - Multiply");
-                Console.WriteLine("\td - Divide\n");
+                Console.WriteLine("\td - Divide");
+                Console.WriteLine("\tr - Square Root");
+                Console.WriteLine("\tp - Power");
+                Console.WriteLine("\tx - 10^x");
+                Console.WriteLine("\tt - Choose Trigonometric Functions");
 
                 Console.Write("Your option? ");
-
                 string? op = Console.ReadLine();
 
                 // Validate input is not null, and matches the pattern
-                while (op == null || !Regex.IsMatch(op, "[a|s|m|d]"))
+                while (op == null || !Regex.IsMatch(op, "[a|s|m|d|r|p|x|t]"))
                 {
                     Console.WriteLine("Error: Unrecognized input. Please try again.");
+                    op = Console.ReadLine();
                 }
 
+                string trigOp = "";
+
+                if (op == "t")
+                {
+                    Console.WriteLine("Please type a trigonometric function to use:");
+                    Console.WriteLine("\tsin - Sine");
+                    Console.WriteLine("\tcos - Cosine");
+                    Console.WriteLine("\ttan - Tangent");
+                    Console.WriteLine("\tsec - Secant");
+                    Console.WriteLine("\tcosec - Cosecant");
+                    Console.WriteLine("\tcot - Cotangent");
+                    Console.Write("Your option? ");
+                    trigOp = Console.ReadLine();
+                    while (trigOp == null || !(trigOp == "sin" || trigOp == "cos" || trigOp == "tan" || trigOp == "sec" || trigOp == "cosec" || trigOp == "cot"))
+                    {
+                        Console.WriteLine("Error: Unrecognized input. Please try again.");
+                        trigOp = Console.ReadLine();
+                    }
+                    if (!usePreviousResult)
+                    {
+                        Console.WriteLine();
+                        Console.Write("Type a number (in radians), and then press Enter: ");
+                        numInput1 = Console.ReadLine();
+                        while (!double.TryParse(numInput1, out cleanNum1))
+                        {
+                            Console.Write("This is not valid input. Please enter a numeric value: ");
+                            numInput1 = Console.ReadLine();
+                        }
+                    }
+                }
+
+                else if (op == "x" || op == "r")
+                {
+                    if (!usePreviousResult)
+                    {
+                        Console.WriteLine();
+                        Console.Write("Type a number, and then press Enter: ");
+                        numInput1 = Console.ReadLine();
+                        while (!double.TryParse(numInput1, out cleanNum1) || (op == "r" && cleanNum1 < 0))
+                        {
+                            if (!double.TryParse(numInput1, out cleanNum1))
+                            {
+                                Console.Write("This is not valid input. Please enter a numeric value: ");
+                            }
+                            else if (op == "r" && cleanNum1 < 0)
+                            {
+                                Console.Write("Error: Cannot calculate square root of a negative number. Please enter a positive number: ");
+                            }
+                            numInput1 = Console.ReadLine();
+                        }
+                    }
+                }
+
+                else
+                {
+                    if (!usePreviousResult)
+                    {
+                        Console.WriteLine();
+                        Console.Write("Type a number, and then press Enter: ");
+                        numInput1 = Console.ReadLine();
+                        while (!double.TryParse(numInput1, out cleanNum1))
+                        {
+                            Console.Write("This is not valid input. Please enter a numeric value: ");
+                            numInput1 = Console.ReadLine();
+                        }
+                    }
+                    Console.Write("Type another number, and then press Enter: ");
+                    numInput2 = Console.ReadLine();
+                    while (!double.TryParse(numInput2, out cleanNum2))
+                    {
+                        Console.Write("This is not valid input. Please enter a numeric value: ");
+                        numInput2 = Console.ReadLine();
+                    }
+                }
+
+                Console.WriteLine("------------------------\n");
                 try
                 {
-                    result += calculator.DoOperation(cleanNum1, cleanNum2, op);
+                    if (op == "t")
+                    {
+                        result += calculator.DoOperation(cleanNum1, 0, trigOp);
+                    }
+                    else if (op == "x" || op == "r")
+                    {
+                        result += calculator.DoOperation(cleanNum1, 0, op);
+                    }
+                    else
+                    {
+                        result += calculator.DoOperation(cleanNum1, cleanNum2, op);
+                    }
                     if (double.IsNaN(result))
                     {
                         Console.WriteLine("This operation will result in a mathematical error.\n");
@@ -154,7 +214,6 @@ namespace CalculatorProgram
                         // }
                         // Wait for the user to respond before closing.
 
-                        Console.WriteLine("------------------------\n");
                         if (calculator.ResultHistory.Count > 0)
                         {
                             // Console.WriteLine("Would you like to delete the previously stored results?");
@@ -188,6 +247,7 @@ namespace CalculatorProgram
                             }
                         }
 
+                        Console.WriteLine();
                         Console.Write("Press 's' to store this result, or press any other key and Enter to continue: ");
                         if (Console.ReadLine() == "s")
                         {
