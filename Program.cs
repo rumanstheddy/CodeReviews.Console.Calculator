@@ -1,4 +1,5 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.Security;
+using System.Text.RegularExpressions;
 using CalculatorLibrary;
 
 namespace CalculatorProgram
@@ -69,11 +70,11 @@ namespace CalculatorProgram
                     op = Console.ReadLine();
                 }
 
-                string trigOp = "";
+                string? trigOp = "";
 
                 if (op == "t")
                 {
-                    Console.WriteLine("Please type a trigonometric function to use:");
+                    Console.WriteLine("\nPlease type a trigonometric function to use:");
                     Console.WriteLine("\tsin - Sine");
                     Console.WriteLine("\tcos - Cosine");
                     Console.WriteLine("\ttan - Tangent");
@@ -107,15 +108,28 @@ namespace CalculatorProgram
                         Console.WriteLine();
                         Console.Write("Type a number, and then press Enter: ");
                         numInput1 = Console.ReadLine();
-                        while (!double.TryParse(numInput1, out cleanNum1) || (op == "r" && cleanNum1 < 0))
+                        while (!double.TryParse(numInput1, out cleanNum1))
+                        {
+                            Console.WriteLine("This is not valid input. Please enter a numeric value: ");
+                            // Console.WriteLine();
+                            numInput1 = Console.ReadLine();
+                        }
+                    }
+
+                    if (op == "r" && cleanNum1 < 0)
+                    {
+                        Console.WriteLine("Error: Cannot calculate square root of a negative number. Please enter a positive number: ");
+                        numInput1 = Console.ReadLine();
+
+                        while (!double.TryParse(numInput1, out cleanNum1) || cleanNum1 < 0)
                         {
                             if (!double.TryParse(numInput1, out cleanNum1))
                             {
-                                Console.Write("This is not valid input. Please enter a numeric value: ");
+                                Console.WriteLine("This is not valid input. Please enter a numeric value: ");
                             }
-                            else if (op == "r" && cleanNum1 < 0)
+                            else if (cleanNum1 < 0)
                             {
-                                Console.Write("Error: Cannot calculate square root of a negative number. Please enter a positive number: ");
+                                Console.WriteLine("Error: Cannot calculate square root of a negative number. Please enter a positive number: ");
                             }
                             numInput1 = Console.ReadLine();
                         }
@@ -165,79 +179,10 @@ namespace CalculatorProgram
                     }
                     else
                     {
-                        Console.WriteLine();
                         Console.WriteLine("Your result: {0:0.##}\n", result);
-
-                        // Console.WriteLine("Would you like to store this result?");
-                        // Console.WriteLine("\ty - Yes");
-                        // Console.WriteLine("\tn - No");
-                        // string? storeDecisionSingle = Console.ReadLine();
-                        // while (storeDecisionSingle == null || !Regex.IsMatch(storeDecisionSingle, "[y | n]"))
-                        // {
-                        //     Console.WriteLine("Error: Unrecognized input. Please try again.");
-                        // }
-
-                        // Console.WriteLine("------------------------\n");
-                        // if (storeDecisionSingle == "y")
-                        // {
-                        //     // calculator.ShouldStoreResults = true;
-                        //     Console.WriteLine("Your result has been stored.\n", result);
-                        //     calculator.ResultHistory.Add(result);
-
-                        //     if (!calculator.ShouldStoreResults)
-                        //     {
-                        //         Console.WriteLine("Would you like to keep storing results from now on?");
-                        //         Console.WriteLine("\ty - Yes");
-                        //         Console.WriteLine("\tn - No");
-                        //         string? storeDecision = Console.ReadLine();
-                        //         while (storeDecision == null || !Regex.IsMatch(storeDecision, "[y | n]"))
-                        //         {
-                        //             Console.WriteLine("Error: Unrecognized input. Please try again.");
-                        //         }
-
-                        //         Console.WriteLine("------------------------\n");
-                        //         if (storeDecision == "y")
-                        //         {
-                        //             calculator.ShouldStoreResults = true;
-                        //             Console.WriteLine("Your results will be stored.\n", result);
-                        //             calculator.ResultHistory.Add(result);
-                        //         }
-                        //         // else
-                        //         // {
-                        //         //     Console.WriteLine("Your results was NOT stored.\n", result);
-                        //         // }
-                        //     }
-                        // }
-                        // else
-                        // {
-                        //     Console.WriteLine("Your result was NOT stored.\n", result);
-                        // }
-                        // Wait for the user to respond before closing.
 
                         if (calculator.ResultHistory.Count > 0)
                         {
-                            // Console.WriteLine("Would you like to delete the previously stored results?");
-                            // Console.WriteLine("\ty - Yes");
-                            // Console.WriteLine("\tn - No");
-                            // string? deleteDecision = Console.ReadLine();
-                            // while (deleteDecision == null || !Regex.IsMatch(deleteDecision, "[y | n]"))
-                            // {
-                            //     Console.WriteLine("Error: Unrecognized input. Please try again.");
-                            // }
-
-                            // Console.WriteLine("------------------------\n");
-                            // if (deleteDecision == "y")
-                            // {
-                            //     calculator.ResultHistory.Clear();
-                            //     calculator.ShouldStoreResults = false;
-                            //     Console.WriteLine("Previous results have been deleted.\n", result);
-                            // }
-                            // else
-                            // {
-                            //     Console.WriteLine("Previous results were NOT deleted.\n", result);
-
-                            // }
-
                             Console.Write("Press 'd' to delete all previously stored results, or press any other key and Enter to continue: ");
                             if (Console.ReadLine() == "d")
                             {
@@ -266,7 +211,7 @@ namespace CalculatorProgram
                     Console.WriteLine("Oh no! An exception occurred trying to do the math.\n - Details: " + e.Message);
                 }
                 // Wait for the user to respond before closing.
-                Console.Write("Press 'n' and Enter to close the app, or press any other key and Enter to continue: ");
+                Console.Write("Press 'n' and Enter to close the app, or press any other key and Enter to continue: \n");
                 if (Console.ReadLine() == "n") endApp = true;
 
                 Console.WriteLine("-----------------------------------------------------------------------------------------------------------------------\n");

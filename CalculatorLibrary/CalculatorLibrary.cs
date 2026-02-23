@@ -24,11 +24,6 @@ class Calculator
         writer.WriteStartArray();
     }
 
-    // TODO: Create a functionality that will count the amount of times the calculator was used.
-    // TODO: Store a list with the latest calculations. And give the users the ability to delete that list.
-    // TODO: Allow the users to use the results in the list above to perform new calculations.
-    // TODO: Add extra calculations: Square Root, Taking the Power, 10x, Trigonometry functions.
-
     // CalculatorLibrary.cs
     public double DoOperation(double num1, double num2, string op)
     {
@@ -76,7 +71,6 @@ class Calculator
                 writer.WriteValue("Power");
                 break;
             case "x":
-                // 10^num1
                 result = Math.Pow(10, num1);
                 writer.WriteValue("TenPowerX");
                 break;
@@ -93,24 +87,20 @@ class Calculator
                 writer.WriteValue("Tangent");
                 break;
             case "sec":
-                // sec(x) = 1/cos(x)
                 if (Math.Cos(num1) != 0)
                     result = 1 / Math.Cos(num1);
                 writer.WriteValue("Secant");
                 break;
             case "cosec":
-                // cosec(x) = 1/sin(x)
                 if (Math.Sin(num1) != 0)
                     result = 1 / Math.Sin(num1);
                 writer.WriteValue("Cosecant");
                 break;
             case "cot":
-                // cot(x) = 1/tan(x)
                 if (Math.Tan(num1) != 0)
                     result = 1 / Math.Tan(num1);
                 writer.WriteValue("Cotangent");
                 break;
-            // Return text for an incorrect option entry.
             default:
                 break;
         }
@@ -121,8 +111,6 @@ class Calculator
         UsageCount += 1;
         return result;
     }
-
-    // CalculatorLibrary.cs
     public void Finish()
     {
         writer.WriteEndArray();
