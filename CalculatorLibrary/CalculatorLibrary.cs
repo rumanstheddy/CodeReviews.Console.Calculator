@@ -1,6 +1,4 @@
-﻿// CalculatorLibrary.cs
-using System.Diagnostics;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 namespace CalculatorLibrary;
 
 class Calculator
